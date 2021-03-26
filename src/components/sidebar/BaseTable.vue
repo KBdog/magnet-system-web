@@ -214,7 +214,11 @@ export default {
             let str = '';
             _this.delList = _this.delList.concat(this.multipleSelection);
             for (let i = 0; i < length; i++) {
-                str += _this.multipleSelection[i].name + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0';
+                if(i==length-1){
+                    str += _this.multipleSelection[i].name;
+                }else {
+                    str += _this.multipleSelection[i].name + ',';
+                }
             }
             if(str==''){
                 _this.$message.error("您没有选中内容")
@@ -223,10 +227,21 @@ export default {
                 _this.$confirm('确定要删除吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
+                    //要传给后端的json数组
+                    var magnetList=new Array();
+                    //单个json对象
+                    var magnetName;
+                    for(var i=0;i<_this.multipleSelection.length;i++){
+                        magnetName=new Object();
+                        magnetName.name=_this.multipleSelection[i].name;
+                        //把json对象加入json数组
+                        magnetList[i]=magnetName;
+                    }
+                    //后端批量删除接口
                     this.$axios({
                         method:'post',
                         url:'http://localhost:8082/queryMagnet/batch/delete',
-                        data:_this.multipleSelection
+                        data:magnetList
                     }).then(function (resp) {
                         if(resp.data.data.result==true){
                             _this.$message.success('删除了'+resp.data.data.total+
@@ -281,6 +296,7 @@ export default {
             _this.$axios({
                 method:'post',
                 url:'http://localhost:8082/queryMagnet/downloadExcel/',
+                //这里传递的已经是json数组
                 data:magnetArray,
                 responseType:'blob'
             }).then(function (resp) {
