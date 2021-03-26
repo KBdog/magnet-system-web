@@ -223,35 +223,28 @@ export default {
                 _this.$confirm('确定要删除吗？', '提示', {
                     type: 'warning'
                 }).then(() => {
-                    for (let i = 0; i < length; i++) {
-                        let name=_this.multipleSelection[i].name;
-                        let magnet=_this.multipleSelection[i].magnet;
-                        //后端访问删除
-                        this.$axios({
-                            method:'post',
-                            url:'http://localhost:8082/queryMagnet/delete_magnet/',
-                            data:{name,magnet}
-                        }).then(function (resp) {
-                            console.log(resp);
-                            if(resp.data==true){
-                                // alert("删除磁力成功！");
-                                _this.$message.success('删除成功');
-                                _this.msgTotal-=1;
-                            }else{
-                                _this.$message.error("删除磁力失败！");
-                            }
-                        }).catch(error=>{
-                            _this.$message.error('删除失败:'+name);
-                            _this.$message.error(error);
-                        });
-                    }
+                    this.$axios({
+                        method:'post',
+                        url:'http://localhost:8082/queryMagnet/batch/delete',
+                        data:_this.multipleSelection
+                    }).then(function (resp) {
+                        if(resp.data.data.result==true){
+                            _this.$message.success('删除了'+resp.data.data.total+
+                                '条数据');
+                        }else {
+                            _this.$message.error('删除失败')
+                        }
+                    }).catch(error=>{
+                        _this.$message.error('错误信息:'+error);
+                    });
+                    //执行删除之后
                     _this.$message.error(`删除了${str}`);
                     _this.multipleSelection = [];
                     str='';
-                    //1s后刷新页面
+                    //2s后刷新页面
                     setTimeout(function () {
                         window.location.reload();
-                    },1000);
+                    },2000);
                 })
             }
         },
