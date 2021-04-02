@@ -19,6 +19,10 @@
                 <el-input v-model="comicName" placeholder="漫画名" class="handle-input mr10" @keyup.enter.native="searchComics"></el-input>
                 <!--搜索按钮-->
                 <el-button type="primary" icon="el-icon-search" @click="searchComics">搜索</el-button>
+                <!--上一页按钮-->
+                <el-button type="primary" icon="el-icon-back" @click="searchCopyMangaPrevious" v-if="pageNum>1">上一页</el-button>
+                <!--下一页按钮-->
+                <el-button type="primary" icon="el-icon-right" @click="searchCopyMangaNext" v-if="pageNum<totalPage">下一页</el-button>
             </div>
         </div>
         <div class="container">
@@ -89,7 +93,15 @@
                 //动漫之家
                 dmzjList:[],
                 //本机
-                kbcomicList:[]
+                kbcomicList:[],
+
+                //copymanga使用的分页
+                //当前页数
+                pageNum:'',
+                //当前总数
+                comicTotal:'',
+                //应有总页数
+                totalPage:'',
             }
         },
         methods:{
@@ -107,9 +119,14 @@
             //关键字查询漫画
             searchComics(){
                 const _this=this;
+                //初始化
                 _this.copyMangaList=null;
                 _this.dmzjList=null;
                 _this.kbcomicList=null;
+                //copymanga关于页数的参数
+                _this.pageNum=null;
+                _this.comicTotal=null;
+                _this.totalPage=null;
                 if(_this.comicResources==''){
                     _this.$message.error("您未选择漫画源");
                 }else if(_this.comicName==''){
@@ -133,14 +150,25 @@
                     //拷贝漫画的源
                     _this.$axios({
                         method:'get',
-                        url: 'https://api.copymanga.com/api/v3/search/comic?format=json&limit=500&offset=0&platform=3',
+                        url: 'https://api.copymanga.com/api/v3/search/comic?format=json&limit=30&offset=0&platform=3',
                         params:{
                             q: _this.comicName
                         }
                     }).then(function (response) {
+                        //漫画列表json
                         var comicJson=JSON.parse(JSON.stringify(response.data.results.list));
+                        //漫画总数
+                        var total=JSON.parse(JSON.stringify(response.data.results.total));
+                        //设置当前页数为第一页
+                        _this.pageNum=1;
+                        //设置漫画总数
+                        _this.comicTotal=total;
+                        //设置总页数
+                        _this.totalPage=total/30;
+                        //给当前页漫画列表赋值
                         _this.copyMangaList=comicJson;
-                        _this.$message.success('查询结果:'+_this.copyMangaList.length+'条');
+                        // _this.$message.success('查询结果:'+_this.copyMangaList.length+'条');
+                        _this.$message.success('查询结果:'+total+'条');
                     }).catch(error=>{
                         _this.$message.error(error);
                     })
@@ -157,9 +185,46 @@
                         _this.$message.error("错误信息:"+error);
                     })
                 }
+            },
+            //拷贝漫画下一页
+            searchCopyMangaNext(){
+                const _this=this;
+                _this.$axios({
+                    method:'get',
+                    url: `https://api.copymanga.com/api/v3/search/comic?format=json&limit=30&offset=${_this.pageNum*30}&platform=3`,
+                    params:{
+                        q: _this.comicName
+                    }
+                }).then(function (response) {
+                    //漫画列表json
+                    var comicJson=JSON.parse(JSON.stringify(response.data.results.list));
+                    //给当前页漫画列表赋值
+                    _this.copyMangaList=comicJson;
+                    _this.pageNum+=1;
+                    _this.$message.success("当前进度:"+((_this.pageNum-1)*30+_this.copyMangaList.length)+"/"+_this.comicTotal)
+                })
+            },
+            //拷贝漫画上一页
+            searchCopyMangaPrevious(){
+                const _this=this;
+                var page=_this.pageNum-2;
+                _this.$axios({
+                    method:'get',
+                    url: `https://api.copymanga.com/api/v3/search/comic?format=json&limit=30&offset=${page*30}&platform=3`,
+                    params:{
+                        q: _this.comicName
+                    }
+                }).then(function (response) {
+                    //漫画列表json
+                    var comicJson=JSON.parse(JSON.stringify(response.data.results.list));
+                    //给当前页漫画列表赋值
+                    _this.copyMangaList=comicJson;
+                    _this.pageNum-=1;
+                    _this.$message.success("当前进度:"+((_this.pageNum-1)*30+_this.copyMangaList.length)+"/"+_this.comicTotal)
+                })
             }
-
         },
+
         created() {
 
         }

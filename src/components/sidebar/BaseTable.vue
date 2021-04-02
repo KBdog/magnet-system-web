@@ -20,7 +20,8 @@
                 <!--搜索按钮-->
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch(query_name)">搜索</el-button>
                 <!--添加磁力按钮-->
-                <el-button type="primary" icon="el-icon-circle-plus-outline" @click="handleAddMagnet">添加磁力</el-button>
+                <el-button type="primary" icon="el-icon-circle-plus-outline" @click="handleAddMagnet"
+                           v-if="per==='2'||per==='1'">添加磁力</el-button>
                 &nbsp;
                 <!--日期选择器-->
                 <el-date-picker
