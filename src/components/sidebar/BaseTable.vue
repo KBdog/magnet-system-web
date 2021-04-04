@@ -240,7 +240,7 @@ export default {
                     }
                     //后端批量删除接口
                     this.$axios({
-                        method:'post',
+                        method:'delete',
                         url:'http://localhost:8082/queryMagnet/batch/delete',
                         data:magnetList
                     }).then(function (resp) {
@@ -296,7 +296,7 @@ export default {
             //访问后端接口请求下载报表
             _this.$axios({
                 method:'post',
-                url:'http://localhost:8082/queryMagnet/downloadExcel/',
+                url:'http://localhost:8082/queryMagnet/downloadExcel',
                 //这里传递的已经是json数组
                 data:magnetArray,
                 responseType:'blob'
@@ -342,7 +342,7 @@ export default {
                     //访问后端接口
                     _this.$axios({
                         method:"post",
-                        url:"http://localhost:8082/queryMagnet/query_TimeReport/",
+                        url:"http://localhost:8082/queryMagnet/query_TimeReport",
                         data:{start,end}
                     }).then(function (resp) {
                         console.log(resp)
@@ -384,8 +384,8 @@ export default {
                 _this.$alert("磁力链接必须包含magnet:?xt=urn:btih:","提示");
             }else{
                 _this.$axios({
-                    method:'post',
-                    url:'http://localhost:8082/queryMagnet/update_magnet/',
+                    method:'put',
+                    url:'http://localhost:8082/queryMagnet/update_magnet',
                     data:[
                         {
                             name:_this.beforeUpdateForm.name,
@@ -433,8 +433,9 @@ export default {
                 //从localStorage中获取token
                 var token=localStorage.getItem('token');
                 _this.$axios({
+                    //只有post方法才能传参数
                     method:'post',
-                    url:'http://localhost:8082/queryMagnet/keyword/',
+                    url:'http://localhost:8082/queryMagnet/keyword',
                     data:{
                         keyword:keyword
                     },
@@ -490,7 +491,7 @@ export default {
             else if(magnet.match(/^(magnet:\?xt=urn:btih:)/)){
                 _this.$axios({
                     method: 'post',
-                    url:'http://localhost:8082/queryMagnet/add_magnet/',
+                    url:'http://localhost:8082/queryMagnet/add_magnet',
                     data:{name,magnet}
                 }).then(function (resp) {
                     console.log(resp)
@@ -522,8 +523,8 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.$axios({
-                    method:'post',
-                    url:'http://localhost:8082/queryMagnet/delete_magnet/',
+                    method:'delete',
+                    url:'http://localhost:8082/queryMagnet/delete_magnet',
                     data:{name,magnet}
                     }).then(function (resp) {
                         console.log(resp);
