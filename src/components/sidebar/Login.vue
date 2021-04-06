@@ -31,84 +31,86 @@
 </template>
 
 <script>
-export default {
-    data: function() {
-        return {
-            param: {
-                username: '',
-                password: '',
-            },
-            rules: {
-                username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-            },
-        };
-    },
-    methods: {
-        submitForm() {
-            this.$refs.login.validate(valid => {
-                //表单填写完整
-                if (valid) {
-                    const _this=this;
-                    //查询是否存在用户
-                    _this.$axios({
-                        method:'post',
-                        url:'http://localhost:8082/login/validate',
-                        data:{
-                            account:_this.param.username,
-                            password:_this.param.password
-                        }
-                    }).then(function (resp1) {
-                        //状态码正确则登陆成功
-                        if(resp1.data.code=='200'){
-                            //本地添加token
-                            console.log(resp1.data.data.token);
-                            localStorage.setItem('token',resp1.data.data.token);
-                            //获取account
-                            _this.$axios({
-                                method:'post',
-                                url:'http://localhost:8082/login/message',
-                                data:{
-                                    account:_this.param.username,
-                                    password:_this.param.password
-                                }
-                            }).then(function (resp2) {
-                                //登录日期格式化
-                                var date=new Date();
-                                var year=date.getFullYear();
-                                var month=date.getMonth()+1;
-                                var day=date.getDate();
-                                if  (month >= 1 && month <= 9) {
-                                    month =  "0"  + month;
-                                }
-                                if  (day >= 0 && day <= 9) {
-                                    day =  "0"  + day;
-                                }
-                                var currentDate=year+'-'+month+'-'+day;
-                                localStorage.setItem('ms_uid',JSON.parse(JSON.stringify(resp2.data.data))['uid']);
-                                localStorage.setItem('ms_username',JSON.parse(JSON.stringify(resp2.data.data))['account']);
-                                localStorage.setItem('ms_authority',JSON.parse(JSON.stringify(resp2.data.data))['authority']);
-                                localStorage.setItem('ms_newLoginTime',currentDate);
-                                _this.$message.success('登陆成功');
-                                _this.$router.push('/');
-                            });
-                        }else {
-                            _this.$message.error('账号或密码错误');
-                            console.log('error submit!!');
-                            return false;
-                        }
-                    }).catch(error=>{
-                        _this.$message.error('网络连接失败！');
-                    })
-                } else {
-                    this.$message.error('请输入账号和密码');
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+    //引入api
+    import host from '../../api/ApiAddress'
+    export default {
+        data: function() {
+            return {
+                param: {
+                    username: '',
+                    password: '',
+                },
+                rules: {
+                    username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                },
+            };
         },
-    },
-};
+        methods: {
+            submitForm() {
+                this.$refs.login.validate(valid => {
+                    //表单填写完整
+                    if (valid) {
+                        const _this=this;
+                        //查询是否存在用户
+                        _this.$axios({
+                            method:'post',
+                            url:'http://'+host.host+':8082/login/validate',
+                            data:{
+                                account:_this.param.username,
+                                password:_this.param.password
+                            }
+                        }).then(function (resp1) {
+                            //状态码正确则登陆成功
+                            if(resp1.data.code=='200'){
+                                //本地添加token
+                                console.log(resp1.data.data.token);
+                                localStorage.setItem('token',resp1.data.data.token);
+                                //获取account
+                                _this.$axios({
+                                    method:'post',
+                                    url:'http://'+host.host+':8082/login/message',
+                                    data:{
+                                        account:_this.param.username,
+                                        password:_this.param.password
+                                    }
+                                }).then(function (resp2) {
+                                    //登录日期格式化
+                                    var date=new Date();
+                                    var year=date.getFullYear();
+                                    var month=date.getMonth()+1;
+                                    var day=date.getDate();
+                                    if  (month >= 1 && month <= 9) {
+                                        month =  "0"  + month;
+                                    }
+                                    if  (day >= 0 && day <= 9) {
+                                        day =  "0"  + day;
+                                    }
+                                    var currentDate=year+'-'+month+'-'+day;
+                                    localStorage.setItem('ms_uid',JSON.parse(JSON.stringify(resp2.data.data))['uid']);
+                                    localStorage.setItem('ms_username',JSON.parse(JSON.stringify(resp2.data.data))['account']);
+                                    localStorage.setItem('ms_authority',JSON.parse(JSON.stringify(resp2.data.data))['authority']);
+                                    localStorage.setItem('ms_newLoginTime',currentDate);
+                                    _this.$message.success('登陆成功');
+                                    _this.$router.push('/');
+                                });
+                            }else {
+                                _this.$message.error('账号或密码错误');
+                                console.log('error submit!!');
+                                return false;
+                            }
+                        }).catch(error=>{
+                            _this.$message.error('网络连接失败！');
+                        })
+                    } else {
+                        this.$message.error('请输入账号和密码');
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+        },
+    };
 </script>
 
 <style scoped>

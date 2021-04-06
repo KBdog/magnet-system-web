@@ -39,6 +39,7 @@
 
 <script>
 import Schart from 'vue-schart';
+import host from '../../api/ApiAddress'
 export default {
     name: 'basecharts',
     components: {
@@ -158,7 +159,7 @@ export default {
                 counts[i]=0;
                 await _this.$axios({
                     method:'get',
-                    url: 'http://localhost:8082/queryMagnet/count?start='+dates[i]+'&end='+dates[i+1]
+                    url: 'http://'+host.host+':8082/queryMagnet/count?start='+dates[i]+'&end='+dates[i+1]
                 }).then(function (response) {
                     counts[i]=response.data;
                 })

@@ -129,6 +129,7 @@
 
 <script>
 import { fetchData } from '../../api';
+import host from '../../api/ApiAddress';
 export default {
     name: 'basetable',
     data() {
@@ -234,7 +235,7 @@ export default {
                         //后端访问删除
                         this.$axios({
                             method:'get',
-                            url:'http://localhost:8082/manage/delete?uid='+uid
+                            url:'http://'+host.host+':8082/manage/delete?uid='+uid
                         }).then(function (resp) {
                             console.log(resp);
                             if(resp.data==true){
@@ -290,7 +291,7 @@ export default {
             //访问后端接口请求下载报表
             _this.$axios({
                 method:'post',
-                url:'http://localhost:8082/queryMagnet/downloadExcel/',
+                url:'http://'+host.host+':8082/queryMagnet/downloadExcel/',
                 data:magnetArray,
                 responseType:'blob'
             }).then(function (resp) {
@@ -334,7 +335,7 @@ export default {
                     //访问后端接口
                     _this.$axios({
                         method:"post",
-                        url:"http://localhost:8082/queryMagnet/query_TimeReport/",
+                        url:'http://'+host.host+':8082/queryMagnet/query_TimeReport/',
                         data:{start,end}
                     }).then(function (resp) {
                         console.log(resp)
@@ -392,7 +393,7 @@ export default {
                 //update
                 _this.$axios({
                     method: 'post',
-                    url: 'http://localhost:8082/manage/update',
+                    url: 'http://'+host.host+':8082/manage/update',
                     data:{
                         uid:_this.afterUpdateForm.uid,
                         account:_this.afterUpdateForm.account,
@@ -419,12 +420,12 @@ export default {
                 _this.$alert('搜索关键字不能为空！','提示');
                 //重新查一次
                 _this.$axios.all([
-                    _this.$axios.get('http://localhost:8082/manage/all').then(function (resp) {
+                    _this.$axios.get('http://'+host.host+':8082/manage/all').then(function (resp) {
                         //获取所有数据
                         _this.msgTotal=resp.data.data.length;
                         _this.defaultPageSize=6
                     }),
-                    _this.$axios.get('http://localhost:8082/manage/all/1/6').then(function (resp) {
+                    _this.$axios.get('http://'+host.host+':8082/manage/all/1/6').then(function (resp) {
                         //获取第一页数据
                         _this.tableData=resp.data.data;
                     })
@@ -433,7 +434,7 @@ export default {
             }else {
                 _this.$axios({
                     method:'post',
-                    url:'http://localhost:8082/manage/keyword',
+                    url:'http://'+host.host+':8082/manage/keyword',
                     data:{keyword}
                 }).then(function (resp) {
                     _this.tableData=resp.data.data;
@@ -458,12 +459,12 @@ export default {
             } else {
                 _this.$axios({
                     method: 'get',
-                    url: 'http://localhost:8082/manage/check?username='+username
+                    url: 'http://'+host.host+':8082/manage/check?username='+username
                 }).then(function (res) {
                     if(res.data==false){
                         _this.$axios({
                             method: 'post',
-                            url:'http://localhost:8082/manage/add_user',
+                            url:'http://'+host.host+':8082/manage/add_user',
                             data:{username,password,profile}
                         }).then(function (resp) {
                             console.log(resp)
@@ -501,7 +502,7 @@ export default {
             }).then(() => {
                 this.$axios({
                     method:'get',
-                    url:'http://localhost:8082/manage/delete?uid='+uid,
+                    url:'http://'+host.host+':8082/manage/delete?uid='+uid,
                     }).then(function (resp) {
                         console.log(resp);
                         if(resp.data==true){
@@ -520,7 +521,7 @@ export default {
             // this.$set(this.query, 'pageIndex', currentPage);
             // alert(currentPage);
             const _this=this;
-            this.$axios.get('http://localhost:8082/queryMagnet/all/'+currentPage+'/6').then(function (resp) {
+            this.$axios.get('http://'+host.host+':8082/queryMagnet/all/'+currentPage+'/6').then(function (resp) {
                 //获取当前页数据
                 _this.tableData=resp.data.data;
             })
@@ -541,11 +542,11 @@ export default {
     created() {
         const _this=this;
         //获取所有数据
-        this.$axios.get('http://localhost:8082/manage/all').then(function (resp) {
+        this.$axios.get('http://'+host.host+':8082/manage/all').then(function (resp) {
             _this.msgTotal=resp.data.data.length;
         })
         //获取第一页数据
-        this.$axios.get('http://localhost:8082/manage/all/1/6').then(function (resp) {
+        this.$axios.get('http://'+host.host+':8082/manage/all/1/6').then(function (resp) {
             _this.tableData=resp.data.data;
         })
     }

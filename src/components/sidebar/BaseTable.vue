@@ -138,6 +138,7 @@
 
 <script>
 import { fetchData } from '../../api';
+import host from '../../api/ApiAddress';
 export default {
     name: 'basetable',
     data() {
@@ -241,7 +242,7 @@ export default {
                     //后端批量删除接口
                     this.$axios({
                         method:'delete',
-                        url:'http://localhost:8082/queryMagnet/batch/delete',
+                        url:'http://'+host.host+':8082/queryMagnet/batch/delete',
                         data:magnetList
                     }).then(function (resp) {
                         if(resp.data.data.result==true){
@@ -296,7 +297,7 @@ export default {
             //访问后端接口请求下载报表
             _this.$axios({
                 method:'post',
-                url:'http://localhost:8082/queryMagnet/downloadExcel',
+                url:'http://'+host.host+':8082/queryMagnet/downloadExcel',
                 //这里传递的已经是json数组
                 data:magnetArray,
                 responseType:'blob'
@@ -342,7 +343,7 @@ export default {
                     //访问后端接口
                     _this.$axios({
                         method:"post",
-                        url:"http://localhost:8082/queryMagnet/query_TimeReport",
+                        url:'http://'+host.host+':8082/queryMagnet/query_TimeReport',
                         data:{start,end}
                     }).then(function (resp) {
                         console.log(resp)
@@ -385,7 +386,7 @@ export default {
             }else{
                 _this.$axios({
                     method:'put',
-                    url:'http://localhost:8082/queryMagnet/update_magnet',
+                    url:'http://'+host.host+':8082/queryMagnet/update_magnet',
                     data:[
                         {
                             name:_this.beforeUpdateForm.name,
@@ -417,12 +418,12 @@ export default {
                 _this.$alert('搜索关键字不能为空！','提示');
                 //重新查一次
                 _this.$axios.all([
-                    _this.$axios.get('http://localhost:8082/queryMagnet/all').then(function (resp) {
+                    _this.$axios.get('http://'+host.host+':8082/queryMagnet/all').then(function (resp) {
                         //获取所有数据
                         _this.msgTotal=resp.data.data.length;
                         _this.defaultPageSize=6
                     }),
-                    _this.$axios.get('http://localhost:8082/queryMagnet/all/1/6').then(function (resp) {
+                    _this.$axios.get('http://'+host.host+':8082/queryMagnet/all/1/6').then(function (resp) {
                         //获取第一页数据
                         _this.tableData=resp.data.data;
                     })
@@ -435,7 +436,7 @@ export default {
                 _this.$axios({
                     //只有post方法才能传参数
                     method:'post',
-                    url:'http://localhost:8082/queryMagnet/keyword',
+                    url:'http://'+host.host+':8082/queryMagnet/keyword',
                     data:{
                         keyword:keyword
                     },
@@ -491,7 +492,7 @@ export default {
             else if(magnet.match(/^(magnet:\?xt=urn:btih:)/)){
                 _this.$axios({
                     method: 'post',
-                    url:'http://localhost:8082/queryMagnet/add_magnet',
+                    url:'http://'+host.host+':8082/queryMagnet/add_magnet',
                     data:{name,magnet}
                 }).then(function (resp) {
                     console.log(resp)
@@ -524,7 +525,7 @@ export default {
             }).then(() => {
                 this.$axios({
                     method:'delete',
-                    url:'http://localhost:8082/queryMagnet/delete_magnet',
+                    url:'http://'+host.host+':8082/queryMagnet/delete_magnet',
                     data:{name,magnet}
                     }).then(function (resp) {
                         console.log(resp);
@@ -545,7 +546,7 @@ export default {
             // this.$set(this.query, 'pageIndex', currentPage);
             // alert(currentPage);
             const _this=this;
-            this.$axios.get('http://localhost:8082/queryMagnet/all/'+currentPage+'/6').then(function (resp) {
+            this.$axios.get('http://'+host.host+':8082/queryMagnet/all/'+currentPage+'/6').then(function (resp) {
                 //获取当前页数据
                 _this.tableData=resp.data.data;
             })
@@ -566,11 +567,11 @@ export default {
     created() {
         const _this=this;
         //获取所有数据
-        this.$axios.get('http://localhost:8082/queryMagnet/all').then(function (resp) {
+        this.$axios.get('http://'+host.host+':8082/queryMagnet/all').then(function (resp) {
             _this.msgTotal=resp.data.data.length;
         })
         //获取第一页数据
-        this.$axios.get('http://localhost:8082/queryMagnet/all/1/6').then(function (resp) {
+        this.$axios.get('http://'+host.host+':8082/queryMagnet/all/1/6').then(function (resp) {
             _this.tableData=resp.data.data;
         })
         //获得权限标志并赋值
