@@ -69,6 +69,8 @@
 </template>
 
 <script>
+    //引入当前网络ip
+    import host from '../../api/ApiAddress'
     //引入lazyload
     import Vue from 'vue';
     import VueLazyload from 'vue-lazyload';
@@ -176,7 +178,7 @@
                     //本机
                     _this.$axios({
                         method: 'get',
-                        url: `http://localhost:8081/api/comic/keyword?keyword=${_this.comicName}`
+                        url: 'http://'+host.host+':8081/api/comic/keyword?keyword='+_this.comicName,
                     }).then(function (response) {
                         var comicJson=JSON.parse(JSON.stringify(response.data.data));
                         _this.kbcomicList=comicJson;

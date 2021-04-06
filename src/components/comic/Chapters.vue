@@ -64,6 +64,7 @@
 </template>
 
 <script>
+    import host from '../../api/ApiAddress'
     export default {
         name: "Chapters",
         data(){
@@ -155,7 +156,7 @@
                     //kbcomic
                     _this.$axios({
                         method:'get',
-                        url:`http://localhost:8081/api/pic/${chapterId}`
+                        url:'http://'+host.host+':8081/api/pic/'+chapterId,
                     }).then(function (response) {
                         _this.$router.push({
                             name:'pictures',
@@ -230,7 +231,7 @@
                 _this.comicDescription=_this.comicMessage.comicDescription;
                 _this.$axios({
                     method:'get',
-                    url:`http://localhost:8081/api/chapter/${_this.comicMessage.comicId}`
+                    url:'http://'+host.host+':8081/api/chapter/'+_this.comicMessage.comicId,
                 }).then(function (response) {
                     var json=JSON.parse(JSON.stringify(response.data.data));
                     _this.kbcomicChaptersList=json;
