@@ -178,7 +178,7 @@
                     //本机
                     _this.$axios({
                         method: 'get',
-                        url: 'http://'+host.host+':8081/api/comic/keyword?keyword='+_this.comicName,
+                        url: `http://${host.host}:8081/api/comic/keyword?keyword=${_this.comicName}`,
                     }).then(function (response) {
                         var comicJson=JSON.parse(JSON.stringify(response.data.data));
                         _this.kbcomicList=comicJson;
