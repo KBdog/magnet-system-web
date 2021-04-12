@@ -438,6 +438,7 @@ export default {
                     method:'post',
                     url:'http://'+host.host+':8082/queryMagnet/keyword',
                     data:{
+                        uid:localStorage.getItem("ms_uid"),
                         keyword:keyword
                     },
                     //给请求头添加token
