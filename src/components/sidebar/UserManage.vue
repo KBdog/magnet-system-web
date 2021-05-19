@@ -15,7 +15,8 @@
                     批量删除
                 </el-button>
                 <!--搜索框-->
-                <el-input v-model="query_name" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-input v-model="query_name" placeholder="用户名" class="handle-input mr10"
+                          @keyup.enter.native="handleSearch(query_name)"></el-input>
                 <!--搜索按钮-->
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch(query_name)">搜索</el-button>
                 <!--添加用户按钮-->
