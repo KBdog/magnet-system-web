@@ -213,7 +213,7 @@
                 _this.$axios({
                     method:'get',
                     // url: `http://v3api.dmzj1.com/comic/comic_${_this.comicMessage.id}.json`,
-                    url: `http://api.dmzj.com/dynamic/comicinfo/${_this.comicMessage.id}.json`
+                    url: `https://api.dmzj.com/dynamic/comicinfo/${_this.comicMessage.id}.json`
                 }).then(function (response) {
                     console.log(response.data.data.info.description)
                     if(response.data=='漫画不存在!!!'){

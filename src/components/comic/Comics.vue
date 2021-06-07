@@ -137,7 +137,7 @@
                     //漫画之家的源
                     _this.$axios({
                         method:'get',
-                        url:"http://sacg.dmzj.com/comicsum/search.php?s="+_this.comicName
+                        url:"https://sacg.dmzj.com/comicsum/search.php?s="+_this.comicName
                     }).then(function (res1) {
                         var string=res1.data;
                         var tmp=string.split("var g_search_data = ")[1];
