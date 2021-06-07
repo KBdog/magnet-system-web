@@ -1,5 +1,8 @@
 # kb磁力前端
 该vue项目是kb磁力的前端项目，基于kb磁力后端所开发的。用于提供用户登录页面，磁力信息管理，用户权限管理以及漫画爬虫
+## 预览
+* 前端已部署至[https://kbdog.github.io/magnet-system-web/](https://kbdog.github.io/magnet-system-web/)
+* 后端可以自行部署进行数据访问，默认域名localhost，磁力链接管理端口8082，漫画端口8081
 ## 前言
 * [kb磁力后端地址](https://github.com/KBdog/magnet-system)
 * 该项目使用的是[@lin-xin](https://github.com/lin-xin)大佬的[vue-manage-system](https://github.com/lin-xin/vue-manage-system)模板
