@@ -45,8 +45,8 @@
                         <!--动漫之家-->
                         <div class="chapterList" v-for="(chapter,index) in dmzjChaptersList" >
                             <el-button style="margin-right: 20px;margin-bottom: 20px"
-                                       @click="searchPictures(chapter.chapter_id,chapter.chapter_title)">
-                                {{chapter.chapter_title}}
+                                       @click="searchPictures(chapter.id,chapter.chapter_name)">
+                                {{chapter.chapter_name}}
                             </el-button>
                         </div>
                         <!--kbcomic-->
@@ -137,7 +137,8 @@
                     //dmzj源
                     _this.$axios({
                         method:'get',
-                        url:`http://v3api.dmzj1.com/chapter/${_this.comicMessage.id}/${chapterId}.json`
+                        // url:`http://v3api.dmzj1.com/chapter/${_this.comicMessage.id}/${chapterId}.json`,
+                        url:`https://m.dmzj.com/chapinfo/${_this.comicMessage.id}/${chapterId}.html`
                     }).then(function (resp) {
                         console.log("漫画id:"+_this.comicMessage.id+",章节id:"+chapterId);
                         //跳转图片页
@@ -145,8 +146,8 @@
                             name:'pictures',
                             params:{
                                 resource: _this.resource,
-                                chapterName: resp.data.title,
-                                picList: resp.data.page_url_hd
+                                chapterName: resp.data.chapter_name,
+                                picList: resp.data.page_url
                             }
                         })
                     }).catch(error=>{
@@ -211,15 +212,21 @@
                 //漫画具体章节和简介信息
                 _this.$axios({
                     method:'get',
-                    url: `http://v3api.dmzj1.com/comic/comic_${_this.comicMessage.id}.json`
+                    // url: `http://v3api.dmzj1.com/comic/comic_${_this.comicMessage.id}.json`,
+                    url: `http://api.dmzj.com/dynamic/comicinfo/${_this.comicMessage.id}.json`
                 }).then(function (response) {
+                    console.log(response.data.data.info.description)
                     if(response.data=='漫画不存在!!!'){
                         _this.$message.error("漫画已被隐藏");
                     }else {
-                        var json=JSON.parse(JSON.stringify(response.data.chapters[0].data));
-                        _this.dmzjChaptersList=json;
                         //漫画简介
-                        _this.comicDescription=response.data.description;
+                        // _this.comicDescription=response.data.description;
+                        _this.comicDescription=response.data.data.info.description;
+
+                        // var json=JSON.parse(JSON.stringify(response.data.chapters[0].data));
+                        var json=JSON.parse(JSON.stringify(response.data.data.list));
+                        console.log(json)
+                        _this.dmzjChaptersList=json;
                     }
                 }).catch(error=>{
                     _this.$message.error(error)

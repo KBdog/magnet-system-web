@@ -42,7 +42,7 @@
                 <!--dmzj-->
                 <div class="comicList" v-for="(dmzj_comic,index) in dmzjList">
                     <el-card>
-                        <img v-lazy='dmzj_comic.cover' class="image" style="width: 200px" referrerPolicy="no-referrer">
+                        <img v-lazy='dmzj_comic.comic_cover' class="image" style="width: 200px" referrerPolicy="no-referrer">
                         <div style="padding: 5px;width: 200px">
                             <p style="text-align: center;display: block;text-overflow: ellipsis">{{dmzj_comic.comic_name}}</p>
                             <div class="bottom clearfix" style="margin-top: 10px">
@@ -137,7 +137,7 @@
                     //漫画之家的源
                     _this.$axios({
                         method:'get',
-                        url:"http://sacg.dmzj1.com/comicsum/search.php?s="+_this.comicName
+                        url:"http://sacg.dmzj.com/comicsum/search.php?s="+_this.comicName
                     }).then(function (res1) {
                         var string=res1.data;
                         var tmp=string.split("var g_search_data = ")[1];
