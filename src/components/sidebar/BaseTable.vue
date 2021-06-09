@@ -11,7 +11,8 @@
         <div class="container">
             <!--批量删除行-->
             <div class="handle-box">
-                <el-button type="primary" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection">
+                <el-button type="primary" icon="el-icon-delete" class="handle-del mr10" @click="delAllSelection"
+                    v-if="per==='2'||per==='1'">
                     批量删除
                 </el-button>
                 <!--搜索框-->
@@ -50,7 +51,7 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange">
 
-                <el-table-column type="selection" width="55px" align="center"></el-table-column>
+                <el-table-column type="selection" width="55px" align="center" v-if="per==='2'||per==='1'"></el-table-column>
                 <el-table-column prop="name" label="资源名" width="300px" align="center"></el-table-column>
                 <el-table-column prop="magnet" label="磁力链接" width="450px" align="center"></el-table-column>
                 <el-table-column prop="time" label="收录时间" align="center"></el-table-column>
